@@ -116,4 +116,24 @@ SELECT * FROM Worker ORDER BY FIRST_NAME ASC, DEPARTMENT DESC;
 */
 SELECT * FROM Worker WHERE FIRST_NAME IN ("Vipul", "Satish");
 
+/*Q-14. Write an SQL query to print details of workers excluding first names, “Vipul” and “Satish” from Worker table.
+*/
+SELECT * FROM Worker WHERE FIRST_NAME != ("Vipul") AND FIRST_NAME !=("Satish");
 
+/*Q-15. Write an SQL query to print details of Workers with DEPARTMENT name as “Admin”.*/
+SELECT * FROM Worker WHERE DEPARTMENT="Admin";
+
+/*Q-16. Write an SQL query to print details of the Workers whose FIRST_NAME contains ‘a’.*/
+SELECT * FROM Worker WHERE FIRST_NAME LIKE '%a%';
+
+/*Q-17. Write an SQL query to print details of the Workers whose FIRST_NAME ends with ‘a’.*/
+SELECT * FROM Worker WHERE FIRST_NAME LIKE '%a';
+
+/*Q-18. Write an SQL query to print details of the Workers whose FIRST_NAME ends with ‘h’ and contains six alphabets.*/
+SELECT * FROM Worker WHERE FIRST_NAME LIKE '%h' AND LENGTH(FIRST_NAME) = 6;
+
+/*Q-19. Write an SQL query to print details of the Workers whose SALARY lies between 100000 and 500000.*/
+SELECT * FROM Worker WHERE SALARY>=100000 AND SALARY<=500000;
+
+/*Q-20. Write an SQL query to print details of the Workers who have joined in Feb’2014.*/
+SELECT * FROM Worker WHERE year(JOINING_DATE) = 2014 and month(JOINING_DATE) = 2;
