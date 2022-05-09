@@ -7,7 +7,7 @@ show databases;				/*to display all databases*/
 
 use sql_practicing;  /*command to use this database of sql_practicing*/
 
-show tables
+show tables;
 
 CREATE TABLE Worker
 (
@@ -31,7 +31,7 @@ INSERT INTO Worker (WORKER_ID,FIRST_NAME,LAST_NAME,SALARY,JOINING_DATE,DEPARTMEN
 (007, 'Satish', 'Kumar', 75000, '14-01-20 09.00.00', 'Account'),
 (008, 'Geetika', 'Chauhan', 90000, '14-04-11 09.00.00', 'Admin');
 
-select count(*) from Worker
+select count(*) from Worker;
 
 CREATE TABLE Bonus
 (
@@ -51,7 +51,7 @@ INSERT INTO Bonus
 		(001, 4500, '16-02-20'),
 		(002, 3500, '16-06-11');
 
-select * from Bonus
+select * from Bonus;
 
 CREATE TABLE Title
 (
@@ -137,3 +137,83 @@ SELECT * FROM Worker WHERE SALARY>=100000 AND SALARY<=500000;
 
 /*Q-20. Write an SQL query to print details of the Workers who have joined in Feb’2014.*/
 SELECT * FROM Worker WHERE year(JOINING_DATE) = 2014 and month(JOINING_DATE) = 2;
+
+/*Q-21. Write an SQL query to fetch the count of employees working in the department ‘Admin’.*/
+SELECT COUNT(*) FROM Worker WHERE DEPARTMENT='Admin';
+
+/*Q-22. Write an SQL query to fetch worker names with salaries >= 50000 and <= 100000.*/
+SELECT concat(FIRST_NAME,' ',LAST_NAME) as WORKER_NAME, SALARY from Worker WHERE SALARY>=50000 AND SALARY<=100000;
+
+/*Q-23. Write an SQL query to fetch the no. of workers for each department in the descending order.*/
+SELECT COUNT(WORKER_ID) No_Of_Workers, DEPARTMENT from Worker GROUP BY DEPARTMENT ORDER BY No_Of_Workers DESC;
+
+/*Q-24. Write an SQL query to print details of the Workers who are also Managers.*/
+SELECT DISTINCT *
+FROM Worker 
+INNER JOIN Title 
+ON WORKER_ID = WORKER_REF_ID
+WHERE WORKER_TITLE in ('Manager');
+
+/*Q-25. Write an SQL query to fetch duplicate records having matching data in some fields of a table.*/
+SELECT WORKER_TITLE,COUNT(*) As Duplicated
+FROM Title
+GROUP BY WORKER_TITLE
+HAVING COUNT(*) > 1;
+
+/*Q-26. Write an SQL query to show only odd rows from a table.*/
+SELECT * from Worker WHERE WORKER_ID % 2 != 0;
+
+/*Q-27. Write an SQL query to show only even rows from a table.*/
+SELECT * from Worker WHERE WORKER_ID % 2 = 0;
+
+/*Q-28. Write an SQL query to clone a new table from another table.*/
+CREATE TABLE WorkerClone LIKE Worker;
+
+/*Q-29. Write an SQL query to fetch intersecting records of two tables.*/
+
+
+/*Q-30. Write an SQL query to show records from one table that another table does not have.
+*/ # This shows all the Worker that are not in Bonus Table compared to Worker Table
+SELECT WORKER_ID, CONCAT(FIRST_NAME,'',LAST_NAME) as FULLNAME FROM WORKER
+WHERE WORKER_ID
+NOT IN (SELECT WORKER_REF_ID FROM Bonus) 
+ORDER BY WORKER_ID ASC;
+
+/*Q-31. Write an SQL query to show the current date and time.*/
+SELECT NOW();
+
+/*Q-32. Write an SQL query to show the top n (say 5) records of a table.*/
+SELECT * FROM Bonus ORDER BY WORKER_REF_ID ASC LIMIT 5;
+
+/*Q-33. Write an SQL query to determine the nth (say n=5) highest salary from a table.*/
+# Limit for selecting TOP 5
+SELECT  FIRST_NAME, SALARY FROM WORKER ORDER BY SALARY DESC LIMIT 5;
+
+/*Q-34. Write an SQL query to determine the 5th highest salary without using TOP or limit method.*/
+
+ 
+/*Q-35. Write an SQL query to fetch the list of employees with the same salary.*/
+SELECT DISTINCT W.WORKER_ID, W.FIRST_NAME, W.SALARY
+FROM Worker W, Worker W1
+WHERE W.SALARY = W1.SALARY
+and W.WORKER_ID != W1.WORKER_ID
+ORDER BY W.WORKER_ID;
+
+/*Q-36. Write an SQL query to show the second highest salary from a table.*/
+SELECT MAX(SALARY)
+FROM Worker
+WHERE SALARY < ( SELECT MAX(SALARY)
+FROM Worker);
+
+/*Q-37. Write an SQL query to show one row twice in results from a table.*/
+SELECT FIRST_NAME, LAST_NAME, DEPARTMENT FROM WORKER WHERE FIRST_NAME='Monika'
+UNION ALL
+SELECT FIRST_NAME, LAST_NAME, DEPARTMENT FROM WORKER WHERE FIRST_NAME='Monika';
+
+/*Q-39. Write an SQL query to fetch the first 50% records from a table.
+*/
+SET @v1 := (SELECT COUNT(*) / 2 FROM Worker);
+SELECT * FROM WORKER LIMIT @v1;
+SELECT @v1;
+                 
+
