@@ -215,5 +215,39 @@ SELECT FIRST_NAME, LAST_NAME, DEPARTMENT FROM WORKER WHERE FIRST_NAME='Monika';
 SET @v1 := (SELECT COUNT(*) / 2 FROM Worker);
 SELECT * FROM WORKER LIMIT @v1;
 SELECT @v1;
-                 
 
+/*Q-40. Write an SQL query to fetch the departments that have less than five people in it.*/
+SELECT DISTINCT DEPARTMENT,COUNT(WORKER_ID) as 'No Workers' FROM Worker GROUP BY DEPARTMENT HAVING COUNT(WORKER_ID) <= 5;
+
+                 
+/*Q-41. Write an SQL query to show all departments along with the number of people in there.*/
+SELECT DEPARTMENT,COUNT(WORKER_ID) as 'No Workers' FROM Worker GROUP BY DEPARTMENT; 
+
+/*Q-42. Write an SQL query to show the last record from a table.*/
+SELECT * FROM Worker ORDER BY WORKER_ID DESC LIMIT 1;  
+
+/*Q-43. Write an SQL query to fetch the first row of a table.*/
+SELECT * FROM Worker ORDER BY WORKER_ID ASC LIMIT 1;  
+
+/*Q-44. Write an SQL query to fetch the last five records from a table.*/
+SELECT * FROM Worker ORDER BY WORKER_ID DESC LIMIT 5; 
+
+/*Q-45. Write an SQL query to print the name of employees having the highest salary in each department.*/
+SELECT t.DEPARTMENT,t.FIRST_NAME,t.Salary from(SELECT max(Salary) as TotalSalary,DEPARTMENT from Worker group by DEPARTMENT) as TempNew 
+Inner Join Worker t on TempNew.DEPARTMENT=t.DEPARTMENT 
+ and TempNew.TotalSalary=t.Salary;
+
+/*Q-46. Write an SQL query to fetch three max salaries from a table.*/ 
+SELECT DISTINCT SALARY FROM Worker ORDER BY SALARY DESC LIMIT 3;
+
+/*Q-47. Write an SQL query to fetch three min salaries from a table.*/
+SELECT DISTINCT SALARY FROM Worker ORDER BY SALARY ASC LIMIT 3;
+
+/*Q-49. Write an SQL query to fetch departments along with the total salaries paid for each of them.*/
+SELECT DEPARTMENT,SUM(SALARY) FROM Worker GROUP BY DEPARTMENT;
+
+/*Q-50. Write an SQL query to fetch the names of workers who earn the highest salary.*/
+SELECT CONCAT(FIRST_NAME,' ',LAST_NAME) as WORKER_NAME, SALARY
+FROM Worker
+WHERE SALARY = (SELECT MAX(SALARY) 
+                FROM Worker)
